@@ -53,7 +53,7 @@ public interface RetrofitInterface {
     Member getMemberForBoard(@Path("boardid") Long boardId, @Path("memberid") Long memberId);
 
     @GET("/boards/{boardid}/members")
-    List<Member> getMembersForBoard();
+    List<Member> getMembersForBoard(@Path("boardid") Long boardId);
 
     @POST("/boards/{boardid}/members")
     RestId createMember(@Path("boardid") Long boardID, @Body Member member);

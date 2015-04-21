@@ -68,8 +68,8 @@ public class RestService {
         return api.getItemsForBoard(boardId);
     }
 
-    public void createItem(Long boardID, Item item) {
-        RestId resp = api.createItem(boardID, item);
+    public void createItem(Item item) {
+        RestId resp = api.createItem(item.getBoardId(), item);
         item.setId(resp.getId());
     }
 
@@ -85,17 +85,17 @@ public class RestService {
         return api.getMemberForBoard(boardId, memberId);
     }
 
-    public List<Member> getMembersForBoard() {
-        return api.getMembersForBoard();
+    public List<Member> getMembersForBoard(Long boardId) {
+        return api.getMembersForBoard(boardId);
     }
 
-    public void createMember(Long boardID, Member member) {
-        RestId resp = api.createMember(boardID, member);
+    public void createMember(Member member) {
+        RestId resp = api.createMember(member.getBoardId(), member);
         member.setId(resp.getId());
     }
 
-    public void updateMember(Long boardID, Member member) {
-        api.updateMember(boardID, member.getId(), member);
+    public void updateMember(Member member) {
+        api.updateMember(member.getBoardId(), member.getId(), member);
     }
 
     public void deleteMember(Long boardID, Long memberId) {

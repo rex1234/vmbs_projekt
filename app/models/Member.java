@@ -6,6 +6,7 @@ package models;
 public class Member {
     private Long id;
     private String name;
+    private Long boardId;
 
     public Long getId() {
         return id;
@@ -21,5 +22,13 @@ public class Member {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
     }
 }

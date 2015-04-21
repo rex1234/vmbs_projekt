@@ -5,10 +5,11 @@ package models;
  */
 public class Item {
     private Long id;
-    private RetrospectiveType tag;
-    private String text;
-    private boolean ready;
-    private Long memberId;
+    private Long boardId;
+    private Long ownerId;
+
+    //poker
+    private int cardIndex;
 
     public Long getId() {
         return id;
@@ -18,35 +19,19 @@ public class Item {
         this.id = id;
     }
 
-    public RetrospectiveType getTag() {
-        return tag;
+    public Long getBoardId() {
+        return boardId;
     }
 
-    public void setTag(RetrospectiveType tag) {
-        this.tag = tag;
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
     }
 
-    public String getText() {
-        return text;
+    public int getCardIndex() {
+        return cardIndex;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
-
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
-
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setCardIndex(int cardIndex) {
+        this.cardIndex = cardIndex;
     }
 }
