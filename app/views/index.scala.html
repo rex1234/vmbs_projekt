@@ -4,4 +4,9 @@
 
     <h1>@message</h1>
 
+    <form method="post" action="@routes.Application.newBoard()">
+        <input type="text" name="userName" >
+        <input type="text" name="boardName" >
+        <input type="submit"/>
+    </form>
 }
