@@ -1,16 +1,17 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-GET         /                                controllers.Application.index
+GET         /                              controllers.Application.index
 
-GET         /sock                            controllers.Application.socket
+GET         /sock                          controllers.Application.socket
 
-POST        /newboard                        controllers.Application.newBoard
-GET         /board/:id                       controllers.Application.board(id)
+POST        /newboard                      controllers.Application.newBoard
+GET         /board/:id                     controllers.Application.board(id)
 
-GET         /board/:id/users                 controllers.Application.usersForBoard(id)
-POST        /board/updateUsername            controllers.Application.updateUsername
-POST        /board/:id/poker/create          controllers.Application.createCard(id)
-GET         /board/:id/poker/picked          controllers.Application.pickedCards(id)
+GET         /board/:id/users               controllers.Application.usersForBoard(id)
+POST        /board/updateUsername          controllers.Application.updateUsername
+POST        /board/:id/poker/create        controllers.Application.createCard(id)
+GET         /board/:id/poker/picked        controllers.Application.pickedCards(id)
+GET         /board/:id/poker/delete        controllers.Application.deleteItems(id)
 
-GET         /assets/*file                    controllers.Assets.at(path="/public", file)
+GET         /assets/*file                  controllers.Assets.at(path="/public", file)
