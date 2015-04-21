@@ -41,6 +41,7 @@ public class Application extends Controller {
             member.setName(String.valueOf(new Random().nextInt()));
             member.setBoardId(Long.valueOf(id));
             RestService.getInstance().createMember(member);
+            session().put("userId", member.getId().toString());
         } else {
             member = RestService.getInstance().getMemberForBoard(Long.valueOf(id), Long.valueOf(userId));
         }
