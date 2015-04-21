@@ -16,6 +16,24 @@ $(document).ready(function () {
     });
 
 
+    $('.card').on('click', function(){
+        $('.card').each(function(){
+            $(this).attr('class', 'btn btn-info card');
+        });
+
+        $(this).attr('class', 'btn btn-danger card');
+        console.log(this.innerHTML);
+        $.ajax({
+            url: "/board/" + window.location.href.split("/")[4] + "/poker/create",
+            data: {cardIndex: this.innerHTML},
+            method: 'post',
+            context: document.body
+        }).done(function () {
+        });
+
+    });
+
+
 });
 
 function showPopup(){
