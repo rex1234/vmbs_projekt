@@ -97,6 +97,13 @@ public class Application extends Controller {
         }
     }
 
+    public static Result deleteItems(String boardId) {
+        for (Item item : RestService.getInstance().getItemsForBoard(Long.valueOf(boardId))) {
+            RestService.getInstance().deleteItem(Long.valueOf(boardId), item.getId());
+        }
+        return ok();
+    }
+
     public static Result pickedCards(String boardId) {
         try{
             return ok(gson.toJson(RestService.getInstance().getItemsForBoard(Long.valueOf(boardId))));
