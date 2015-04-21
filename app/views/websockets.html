@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+
 <script language="javascript" type="text/javascript">
 
     var wsUri = "ws://localhost:9000/sock";
@@ -17,9 +11,7 @@
     }
     function testWebSocket()
     {
-        writeToScreen("NotCreated");
         websocket = new WebSocket(wsUri);
-        writeToScreen("Created");
         websocket.onopen = function(evt) { onOpen(evt) };
         websocket.onclose = function(evt) { onClose(evt) };
         websocket.onmessage = function(evt) { onMessage(evt) };
@@ -29,8 +21,6 @@
     function onOpen(evt)
     {
         writeToScreen("CONNECTED");
-        doSend("WebSocket rocks");
-        doSend(1);
     }
 
     function onClose(evt)
@@ -41,7 +31,6 @@
     function onMessage(evt)
     {
         writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
-      //  websocket.close();
     }
 
     function onError(evt)
@@ -51,7 +40,8 @@
 
     function doSend(message)
     {
-        writeToScreen("SENT: " + message);  websocket.send(message);
+        writeToScreen("SENT: " + message);
+        websocket.send(message);
     }
 
     function writeToScreen(message)
@@ -64,7 +54,4 @@
 
     window.addEventListener("load", init, false);
 </script>
-<h2>WebSocket Test</h2>
 <div id="output"></div>
-</body>
-</html>
