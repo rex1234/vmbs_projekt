@@ -86,7 +86,9 @@ public class Application extends Controller {
 
             int itemCount = RestService.getInstance().getItemsForBoard(Long.valueOf(boardId)).size();
             int memberCount = RestService.getInstance().getMembersForBoard(Long.valueOf(boardId)).size();
-            broadcast("reveal", boardId);
+            if(itemCount == memberCount) {
+                broadcast("reveal", boardId);
+            }
             return ok();
         } catch (NumberFormatException e) {
             return internalServerError();
