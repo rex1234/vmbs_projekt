@@ -12,6 +12,7 @@ import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import services.ActorWrap;
 import services.MyWebSocketActor;
 import services.RestService;
 import views.html.index;
@@ -22,7 +23,8 @@ import java.util.List;
 import static play.data.Form.form;
 
 public class Application extends Controller {
-    public static List<ActorRef> actors = new ArrayList<ActorRef>();
+    private  Application app = this;
+    public static List<ActorWrap> actors = new ArrayList<ActorWrap>();
 
     private static Gson gson = new Gson();
 
@@ -88,15 +90,21 @@ public class Application extends Controller {
     public static WebSocket<String> socket() {
         return WebSocket.withActor(new F.Function<ActorRef, Props>() {
             public Props apply(ActorRef out) throws Throwable {
-                actors.add(out); // pridanie actorov do pola
-                return MyWebSocketActor.props(out);
+                ActorWrap tmp = new ActorWrap(out,"unknown"); // pridanie actorov do pola
+                actors.add(tmp);
+                return MyWebSocketActor.props(out,tmp);
             }
         });
     }
-
     public static void broadcast(String message){
-        for (ActorRef actor : actors ) {
-            actor.tell(message, null);
+        for (ActorWrap actor : actors ) {
+             actor.actor.tell(message, null);
+        }
+    }
+    public static void broadcast(String message,String id){
+        for (ActorWrap actor : actors ) {
+            if(actor.cmp(id))
+                actor.actor.tell(message, null);
         }
     }
 

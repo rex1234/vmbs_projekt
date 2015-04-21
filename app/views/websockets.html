@@ -20,6 +20,8 @@
 
     function onOpen(evt)
     {
+
+        websocket.send("id:"+"Nejaky board");
         writeToScreen("CONNECTED");
     }
 
@@ -40,7 +42,6 @@
 
     function doSend(message)
     {
-        writeToScreen("SENT: " + message);
         websocket.send(message);
     }
 

@@ -3,20 +3,23 @@ package services;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import controllers.Application;
 
 /**
  * Created by Rajci on 21.4.2015.
  */
 public class MyWebSocketActor extends UntypedActor {
 
-    public static Props props(ActorRef out) {
-        return Props.create(MyWebSocketActor.class, out);
+    public static Props props(ActorRef out, ActorWrap actor) {
+        return Props.create(MyWebSocketActor.class, out , actor);
     }
     public String id;
     private final ActorRef out;
+    public ActorWrap actor;
 
-    public MyWebSocketActor(ActorRef out) {
-        this.out = out;
+    public MyWebSocketActor(ActorRef out, ActorWrap actor) { // zalozenie actora
+        this.out = out;   // vystupny socket
+        this.actor = actor; // identifikacne cislo boardu
     }
     public akka.actor.ActorRef GetActor(){
         return self();
@@ -25,13 +28,13 @@ public class MyWebSocketActor extends UntypedActor {
 
     public void onReceive(Object message) throws Exception {
         if (message instanceof String) {
-            if(((String) message).contentEquals("1")){
-                out.tell("Dostal som spravu", self());
+            String mess = (String) message;
+            if(mess.startsWith("1")){
+                actor.changeId(mess.substring(1));
             }else{
-                out.tell(message, self());
+                out.tell(mess, self());
             }
         }
-
     }
 }
 
