@@ -19,6 +19,7 @@ $(document).ready(function () {
     $('.card').on('click', function(){
         $('.card').each(function(){
             $(this).attr('class', 'btn btn-info card');
+            $(this).attr('disabled',"");
         });
 
         $(this).attr('class', 'btn btn-danger card');
@@ -28,9 +29,8 @@ $(document).ready(function () {
             data: {cardIndex: this.innerHTML},
             method: 'post',
             context: document.body
-        }).done(function () {
+        }).done(function (result) {
         });
-
     });
 
 
@@ -59,3 +59,29 @@ function loadUsers() {
 
     });
 }
+
+
+var wsUri = "ws://localhost:9000/sock";
+var output;
+
+function init()
+{
+    output = document.getElementById("output");
+    testWebSocket();
+}
+function testWebSocket()
+{
+    websocket = new WebSocket(wsUri);
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.send("1" + window.location.href.split("/")[4]);
+}
+
+
+function onMessage(evt){
+    console.log('jozo');
+    console.log(evt);
+
+}
+
+
+window.addEventListener("load", init, false);

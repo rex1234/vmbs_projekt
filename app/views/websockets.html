@@ -12,47 +12,23 @@
     function testWebSocket()
     {
         websocket = new WebSocket(wsUri);
-        websocket.onopen = function(evt) { onOpen(evt) };
-        websocket.onclose = function(evt) { onClose(evt) };
         websocket.onmessage = function(evt) { onMessage(evt) };
-        websocket.onerror = function(evt) { onError(evt) };
+
     }
 
-    function onOpen(evt)
-    {
 
-        websocket.send("id:"+"Nejaky board");
-        writeToScreen("CONNECTED");
+    function onMessage(evt){
+        console.log(evt);
+        $.ajax({
+            url: "/board/" + window.location.href.split("/")[4] + "/poker/create",
+            data: {cardIndex: this.innerHTML},
+            method: 'post',
+            context: document.body
+        }).done(function () {
+        });
     }
 
-    function onClose(evt)
-    {
-        writeToScreen("DISCONNECTED");
-    }
-
-    function onMessage(evt)
-    {
-        writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
-    }
-
-    function onError(evt)
-    {
-        writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-    }
-
-    function doSend(message)
-    {
-        websocket.send(message);
-    }
-
-    function writeToScreen(message)
-    {
-        var pre = document.createElement("p");
-        pre.style.wordWrap = "break-word";
-        pre.innerHTML = message;
-        output.appendChild(pre);
-    }
 
     window.addEventListener("load", init, false);
 </script>
-<div id="output"></div>
+

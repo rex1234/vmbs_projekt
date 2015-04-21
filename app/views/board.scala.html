@@ -184,7 +184,7 @@
 					<div class="page-content">
 						<div class="page-header">
 
-							<input type="text" value="Jozo" class="form-control">
+							<input type="text" value="Vývoj raketového paliva pre èínsku kontrarozvietku" class="form-control">
 
 
 						</div><!-- /.page-header -->
@@ -203,6 +203,13 @@
 									<button class="btn btn-info card">100</button>
 									<button class="btn btn-info card">?</button>
 									<button class="btn btn-info card">kava</button>
+								</p>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div class="row">
+							<div class="col-xs-12">
+								<p id="cardsResult">
+
 								</p>
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -288,9 +295,24 @@
 				websocket.onmessage = function(evt) { onMessage(evt) };
 			}
 
-			function onMessage(evt)
-			{
-				loadUsers();
+			function onMessage(evt) {
+			if(evt.data == "reveal") {
+			    $.ajax({
+					url: "/board/" + window.location.href.split("/")[4] + "/poker/picked",
+					data: {cardIndex: this.innerHTML},
+					context: document.body
+				}).done(function (result) {
+					console.log(result);
+					var array = JSON.parse(result);
+					for (var i = 0; array.length; i++){
+						var cardsResult = $("#cardsResult");
+						var html = '<button class="btn btn-success card">' + array[i].cardIndex + '</button>'
+						cardsResult.append(html);
+					}
+				});
+				} else {
+					loadUsers();
+				}
 			}
 
 			window.addEventListener("load", init, false);
