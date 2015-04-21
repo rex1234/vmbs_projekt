@@ -5,7 +5,7 @@ $(document).ready(function () {
         var newUsername = $('#inputName').val();
         $.ajax({
             url: "/board/updateUsername",
-            data: newUsername,
+            data: {newUsername: newUsername},
             method: 'post',
             context: document.body
         }).done(function (users) {

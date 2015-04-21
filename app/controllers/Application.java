@@ -42,8 +42,9 @@ public class Application extends Controller {
             member.setBoardId(Long.valueOf(id));
             RestService.getInstance().createMember(member);
         } else {
-            member = RestService.getInstance().getMemberForBoard(Long.valueOf(id), Long.valueOf(id));
+            member = RestService.getInstance().getMemberForBoard(Long.valueOf(id), Long.valueOf(userId));
         }
+        session().put("boardId", id);
         broadcast(id + ":users");
         return ok(board.render(member.getName()));
     }
@@ -68,7 +69,8 @@ public class Application extends Controller {
 
     public static Result updateUsername() {
         Member member = RestService.getInstance().getMemberForBoard(Long.valueOf(session().get("boardId")), Long.valueOf(session().get("userId")));
-        member.setName(form().get("newUsername"));
+        member.setName(form().bindFromRequest().get("newUsername"));
+        System.out.println(member.getName());
         RestService.getInstance().updateMember(member);
         broadcast(member.getBoardId() + ":users");
         return ok();
