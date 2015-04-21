@@ -17,10 +17,13 @@ import services.RestService;
 import views.html.index;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static play.data.Form.form;
 
 public class Application extends Controller {
+    public static List<ActorRef> actors = new ArrayList<ActorRef>();
 
     private static Gson gson = new Gson();
 
@@ -31,12 +34,24 @@ public class Application extends Controller {
     public static WebSocket<String> socket() {
         return WebSocket.withActor(new F.Function<ActorRef, Props>() {
             public Props apply(ActorRef out) throws Throwable {
+                actors.add(out); // pridanie actorov do pola
                 return MyWebSocketActor.props(out);
             }
         });
     }
+    public static Result Update(){
+        broadcast(" 1");
+        return ok();
+    }
 
+    public static int broadcast(String d){
+        for (ActorRef o : actors ) {
+            o.tell(d,null);
+        }
+        return 0;
+    }
     public static Result board(String id) {
+
         return play.mvc.Results.TODO;
     }
 

@@ -30,6 +30,7 @@
     {
         writeToScreen("CONNECTED");
         doSend("WebSocket rocks");
+        doSend(1);
     }
 
     function onClose(evt)
@@ -40,7 +41,7 @@
     function onMessage(evt)
     {
         writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
-        websocket.close();
+      //  websocket.close();
     }
 
     function onError(evt)
@@ -60,9 +61,10 @@
         pre.innerHTML = message;
         output.appendChild(pre);
     }
-    <h2>WebSocket Test</h2>
-    <div id="output"></div>
+
     window.addEventListener("load", init, false);
 </script>
+<h2>WebSocket Test</h2>
+<div id="output"></div>
 </body>
 </html>
