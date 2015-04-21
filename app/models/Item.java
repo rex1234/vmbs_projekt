@@ -9,7 +9,7 @@ public class Item {
     private Long ownerId;
 
     //poker
-    private int cardIndex;
+    private String cardIndex;
 
     public Long getId() {
         return id;
@@ -27,11 +27,11 @@ public class Item {
         this.boardId = boardId;
     }
 
-    public int getCardIndex() {
+    public String getCardIndex() {
         return cardIndex;
     }
 
-    public void setCardIndex(int cardIndex) {
+    public void setCardIndex(String cardIndex) {
         this.cardIndex = cardIndex;
     }
 }

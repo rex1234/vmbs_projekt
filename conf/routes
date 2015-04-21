@@ -11,6 +11,6 @@ GET         /board/:id                       controllers.Application.board(id)
 GET         /board/:id/users                 controllers.Application.usersForBoard(id)
 POST        /board/updateUsername            controllers.Application.updateUsername
 POST        /board/:id/poker/create          controllers.Application.createCard(id)
-POST        /board/:id/poker/picked          controllers.Application.pickedCards(id)
+GET         /board/:id/poker/picked          controllers.Application.pickedCards(id)
 
 GET         /assets/*file                    controllers.Assets.at(path="/public", file)

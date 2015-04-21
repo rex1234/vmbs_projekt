@@ -46,7 +46,7 @@ public class Application extends Controller {
             member = RestService.getInstance().getMemberForBoard(Long.valueOf(id), Long.valueOf(userId));
         }
         session().put("boardId", id);
-        broadcast(id + ":users");
+        broadcast("users", id);
         return ok(board.render(member.getName()));
     }
 
@@ -82,7 +82,11 @@ public class Application extends Controller {
             Item item = form(Item.class).bindFromRequest().get();
             item.setBoardId(Long.valueOf(boardId));
             RestService.getInstance().createItem(item);
-            broadcast(boardId + ":items");
+            broadcast("items", boardId);
+
+            int itemCount = RestService.getInstance().getItemsForBoard(Long.valueOf(boardId)).size();
+            int memberCount = RestService.getInstance().getMembersForBoard(Long.valueOf(boardId)).size();
+            broadcast("reveal", boardId);
             return ok();
         } catch (NumberFormatException e) {
             return internalServerError();
@@ -121,7 +125,7 @@ public class Application extends Controller {
              actor.actor.tell(message, null);
         }
     }
-    public static void broadcast(String message,String id){
+    public static void broadcast(String message, String id){
         for (ActorWrap actor : actors ) {
             if(actor.cmp(id))
                 actor.actor.tell(message, null);
