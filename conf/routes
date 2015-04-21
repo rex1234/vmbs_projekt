@@ -13,4 +13,4 @@ POST        /board/updateUsername            controllers.Application.updateUsern
 POST        /board/:id/poker/create          controllers.Application.createCard(id)
 POST        /board/:id/poker/picked          controllers.Application.pickedCards(id)
 
-GET         /assets/*file                controllers.Assets.at(path="/public", file)
+GET         /assets/*file                    controllers.Assets.at(path="/public", file)

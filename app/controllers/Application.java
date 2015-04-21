@@ -15,26 +15,37 @@ import play.mvc.WebSocket;
 import services.ActorWrap;
 import services.MyWebSocketActor;
 import services.RestService;
-import views.html.index;
+import views.html.board;
+import views.html.login;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static play.data.Form.form;
 
 public class Application extends Controller {
-    private  Application app = this;
     public static List<ActorWrap> actors = new ArrayList<ActorWrap>();
 
     private static Gson gson = new Gson();
 
     public static Result index() {
-        return ok(index.render("Heeeej nasa mega apliacia"));
+        return ok(login.render());
     }
 
     public static Result board(String id) {
+        Member member;
+        String userId = session().get("userId");
+        if(userId == null) {
+            member = new Member();
+            member.setName(String.valueOf(new Random().nextInt()));
+            member.setBoardId(Long.valueOf(id));
+            RestService.getInstance().createMember(member);
+        } else {
+            member = RestService.getInstance().getMemberForBoard(Long.valueOf(id), Long.valueOf(id));
+        }
         broadcast(id + ":users");
-        return play.mvc.Results.TODO;
+        return ok(board.render(member.getName()));
     }
 
     public static Result newBoard() {
@@ -43,19 +54,23 @@ public class Application extends Controller {
         board.setBoardType(BoardType.POKER_PLANNING);
         board.setName(dynamicForm.get("boardName"));
 
+        RestService.getInstance().createBoard(board);
+
         Member member = new Member();
         member.setBoardId(board.getId());
         member.setName(dynamicForm.get("userName"));
-
-        RestService.getInstance().createBoard(board);
         RestService.getInstance().createMember(member);
+        session().put("userId", member.getId().toString());
+        session().put("boardId", board.getId().toString());
 
         return redirect("/board/" + board.getId());
     }
 
     public static Result updateUsername() {
-        Member member = form(Member.class).bindFromRequest().get();
+        Member member = RestService.getInstance().getMemberForBoard(Long.valueOf(session().get("boardId")), Long.valueOf(session().get("userId")));
+        member.setName(form().get("newUsername"));
         RestService.getInstance().updateMember(member);
+        broadcast(member.getBoardId() + ":users");
         return ok();
     }
 
@@ -64,6 +79,7 @@ public class Application extends Controller {
             Item item = form(Item.class).bindFromRequest().get();
             item.setBoardId(Long.valueOf(boardId));
             RestService.getInstance().createItem(item);
+            broadcast(boardId + ":items");
             return ok();
         } catch (NumberFormatException e) {
             return internalServerError();
@@ -87,6 +103,7 @@ public class Application extends Controller {
     }
 
     /////////////////////////////
+
     public static WebSocket<String> socket() {
         return WebSocket.withActor(new F.Function<ActorRef, Props>() {
             public Props apply(ActorRef out) throws Throwable {
