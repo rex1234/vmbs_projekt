@@ -16,7 +16,6 @@ import services.MyWebSocketActor;
 import services.RestService;
 import views.html.index;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,27 +30,8 @@ public class Application extends Controller {
         return ok(index.render("Heeeej nasa mega apliacia"));
     }
 
-    public static WebSocket<String> socket() {
-        return WebSocket.withActor(new F.Function<ActorRef, Props>() {
-            public Props apply(ActorRef out) throws Throwable {
-                actors.add(out); // pridanie actorov do pola
-                return MyWebSocketActor.props(out);
-            }
-        });
-    }
-    public static Result Update(){
-        broadcast(" 1");
-        return ok();
-    }
-
-    public static int broadcast(String d){
-        for (ActorRef o : actors ) {
-            o.tell(d,null);
-        }
-        return 0;
-    }
     public static Result board(String id) {
-
+        broadcast(id + ":users");
         return play.mvc.Results.TODO;
     }
 
@@ -77,13 +57,24 @@ public class Application extends Controller {
         return ok();
     }
 
-    public static Result createCard() {
-        Item item = form(Item.class).bindFromRequest().get();
-        RestService.getInstance().createItem(item);
-        return ok();
+    public static Result createCard(String boardId) {
+        try {
+            Item item = form(Item.class).bindFromRequest().get();
+            item.setBoardId(Long.valueOf(boardId));
+            RestService.getInstance().createItem(item);
+            return ok();
+        } catch (NumberFormatException e) {
+            return internalServerError();
+        }
     }
 
-    //public static
+    public static Result pickedCards(String boardId) {
+        try{
+            return ok(gson.toJson(RestService.getInstance().getItemsForBoard(Long.valueOf(boardId))));
+        } catch (NumberFormatException e) {
+            return internalServerError();
+        }
+    }
 
     public static Result usersForBoard(String boardId) {
         try {
@@ -92,4 +83,21 @@ public class Application extends Controller {
             return internalServerError();
         }
     }
+
+    /////////////////////////////
+    public static WebSocket<String> socket() {
+        return WebSocket.withActor(new F.Function<ActorRef, Props>() {
+            public Props apply(ActorRef out) throws Throwable {
+                actors.add(out); // pridanie actorov do pola
+                return MyWebSocketActor.props(out);
+            }
+        });
+    }
+
+    public static void broadcast(String message){
+        for (ActorRef actor : actors ) {
+            actor.tell(message, null);
+        }
+    }
+
 }
